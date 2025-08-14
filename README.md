@@ -1,43 +1,86 @@
-# Todo Application (Full Stack)
+# Todo App - Локальная версия
 
-Полнофункциональное Todo приложение с Django REST API backend и React TypeScript frontend.
+Полнофункциональное To-Do приложение с React фронтендом и Django бэкендом, готовое для локального запуска.
+
+## Быстрый запуск
+
+### Предварительные требования
+- Docker
+- Docker Compose
+
+### 1. Клонирование репозитория
+```bash
+git clone https://github.com/abylsliam44/waviot-task.git
+cd waviot-task
+```
+
+### 2. Создание .env файла
+В корневой папке создайте файл `.env`:
+```bash
+# PostgreSQL Database
+POSTGRES_DB=todo_db
+POSTGRES_USER=todo_user
+POSTGRES_PASSWORD=todo_password123
+
+# Django Settings
+SECRET_KEY=django-insecure-local-development-key-2024
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+CORS_ALLOWED_ORIGINS=http://localhost:3001,http://127.0.0.1:3001
+
+# JWT Settings
+ACCESS_TOKEN_LIFETIME_MINUTES=60
+REFRESH_TOKEN_LIFETIME_DAYS=7
+
+# Frontend API URL
+VITE_API_URL=http://localhost:8000/api
+```
+
+### 3. Запуск приложения
+```bash
+docker-compose up -d
+```
+
+### 4. Доступ к приложению
+- **Frontend**: http://localhost:3001
+- **Backend API**: http://localhost:8000/api
+- **Admin Panel**: http://localhost:8000/admin (admin/admin123)
 
 ## Технологии
 
-### Backend
-- Django 4.2.7
-- Django REST Framework 3.14.0
-- Django Simple JWT 5.3.0
-- PostgreSQL 15
-- Docker & Docker Compose
-
 ### Frontend
-- React 18+ с TypeScript
+- React 18 + TypeScript
 - Vite для сборки
-- React Router v6
-- TanStack Query (React Query)
-- React Hook Form
-- Tailwind CSS
-- Lucide React (иконки)
+- Tailwind CSS для стилизации
+- React Router для навигации
+- Axios для HTTP запросов
+- React Query для управления состоянием
+- React Hook Form для форм
+- React Hot Toast для уведомлений
+
+### Backend
+- Django 4.2
+- Django REST Framework
+- JWT Authentication
+- PostgreSQL 15
+- Docker
 
 ## Функциональность
 
 ### Аутентификация
-- Регистрация пользователей
-- Авторизация с JWT токенами
-- Автоматическое обновление токенов
+- Регистрация и авторизация пользователей
+- JWT токены с автоматическим обновлением
 - Защищенные маршруты
 - Logout с blacklist токенов
 
 ### Управление задачами
 - CRUD операции с задачами
 - Статусы: Pending, Done, Archived
-- Дата создания и due date
-- Отметка просроченных задач
 - Фильтрация по статусу, дате, поиск
-- Пагинация
+- Пагинация результатов
 - Массовые операции
 - Статистика задач
+- Отметка просроченных задач
 
 ### UI/UX
 - Адаптивный дизайн
@@ -47,71 +90,112 @@
 - Модальные окна
 - Валидация форм
 
-## Быстрый запуск
+## Разработка
 
-### Предварительные требования
-- Docker
-- Docker Compose
+### Остановка приложения
+```bash
+docker-compose down
+```
 
-### Настройка переменных окружения
+### Просмотр логов
+```bash
+# Все сервисы
+docker-compose logs -f
 
-1. **Создайте .env файл в корне проекта:**
-   ```bash
-   cp .env.example .env
-   ```
+# Конкретный сервис
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f postgres
+```
 
-2. **Отредактируйте .env файл с вашими настройками:**
-   ```bash
-   # Database Configuration
-   POSTGRES_DB=todo_db
-   POSTGRES_USER=postgres
-   POSTGRES_PASSWORD=your-secure-password
-   
-   # Backend Configuration
-   SECRET_KEY=your-django-secret-key-here
-   DEBUG=True
-   ALLOWED_HOSTS=localhost,127.0.0.1,backend
-   
-   # JWT Settings
-   ACCESS_TOKEN_LIFETIME_MINUTES=60
-   REFRESH_TOKEN_LIFETIME_DAYS=7
-   
-   # CORS Settings
-   CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-   
-   # Frontend Configuration
-   VITE_API_URL=http://localhost:8000/api
-   ```
+### Пересборка контейнеров
+```bash
+docker-compose down
+docker-compose up -d --build
+```
 
-### Запуск проекта
+### Выполнение команд в контейнере
+```bash
+# Django shell
+docker-compose exec backend python manage.py shell
 
-1. **Клонируйте репозиторий**
-   ```bash
-   git clone <repository-url>
-   cd test-task
-   ```
+# Миграции
+docker-compose exec backend python manage.py migrate
 
-2. **Настройте переменные окружения**
-   ```bash
-   cp .env.example .env
-   # Отредактируйте .env файл с вашими настройками
-   ```
+# Создание суперпользователя
+docker-compose exec backend python manage.py createsuperuser
+```
 
-3. **Запустите все сервисы**
-   ```bash
-   docker-compose up --build
-   ```
+## Структура проекта
 
-4. **Откройте приложение**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000/api
-   - Django Admin: http://localhost:8000/admin
+```
+test-task/
+├── frontend/          # React приложение
+│   ├── src/
+│   │   ├── components/     # UI компоненты
+│   │   ├── pages/          # Страницы
+│   │   ├── hooks/          # Custom hooks
+│   │   ├── services/       # API сервисы
+│   │   ├── context/        # React контексты
+│   │   └── types/          # TypeScript типы
+│   ├── Dockerfile
+│   └── package.json
+├── backend/           # Django API
+│   ├── apps/
+│   │   ├── users/          # Пользователи и аутентификация
+│   │   └── tasks/          # Управление задачами
+│   ├── todo_project/       # Настройки Django
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── entrypoint.sh
+├── docker-compose.yml # Docker конфигурация
+├── .env              # Переменные окружения
+└── README.md         # Документация
+```
 
-### Тестовые данные
+## Тестирование
 
-После запуска автоматически создается суперпользователь:
-- **Username:** admin
-- **Password:** admin123
+1. Откройте http://localhost:3001
+2. Зарегистрируйтесь с новым аккаунтом
+3. Создайте несколько задач
+4. Протестируйте все функции:
+   - Создание, редактирование, удаление задач
+   - Изменение статусов
+   - Фильтрация и поиск
+   - Массовые операции
+
+## Устранение проблем
+
+### Проблемы с базой данных
+```bash
+# Удалить volumes и пересоздать
+docker-compose down -v
+docker-compose up -d
+```
+
+### Проблемы с портами
+Убедитесь, что порты свободны:
+- 3001 (frontend)
+- 8000 (backend)
+- 5433 (postgres)
+
+### Проблемы с правами доступа
+```bash
+sudo chown -R $USER:$USER .
+```
+
+### Проверка статуса контейнеров
+```bash
+docker-compose ps
+docker ps
+```
+
+## Безопасность
+
+- Все sensitive данные хранятся в .env файлах
+- .env файлы добавлены в .gitignore
+- Для production используйте сильные пароли и секретные ключи
+- JWT токены имеют ограниченное время жизни
 
 ## API Endpoints
 
@@ -123,7 +207,6 @@ POST /api/auth/logout/       - Выход
 POST /api/auth/refresh/      - Обновление токена
 GET  /api/auth/profile/      - Профиль пользователя
 PUT  /api/auth/profile/      - Обновление профиля
-POST /api/auth/change-password/ - Смена пароля
 ```
 
 ### Задачи
@@ -149,152 +232,3 @@ DELETE /api/tasks/bulk_delete/ - Массовое удаление
 ?ordering=-created_at       - Сортировка
 ?page=1                     - Пагинация
 ```
-
-## Структура проекта
-
-```
-test-task/
-├── backend/                 # Django REST API
-│   ├── apps/
-│   │   ├── users/          # Пользователи и аутентификация
-│   │   └── tasks/          # Управление задачами
-│   ├── todo_project/       # Настройки Django
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── entrypoint.sh
-│   └── .env.example
-├── frontend/               # React TypeScript App
-│   ├── src/
-│   │   ├── components/     # UI компоненты
-│   │   ├── pages/          # Страницы
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── services/       # API сервисы
-│   │   ├── context/        # React контексты
-│   │   └── types/          # TypeScript типы
-│   ├── Dockerfile
-│   ├── package.json
-│   └── .env.example
-├── docker-compose.yml      # Оркестрация сервисов
-├── .env.example           # Пример переменных окружения
-└── README.md
-```
-
-## Переменные окружения
-
-### Главный .env файл (корень проекта)
-```bash
-# Database Configuration
-POSTGRES_DB=todo_db
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your-secure-password
-
-# Backend Configuration
-SECRET_KEY=your-django-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1,backend
-
-# JWT Settings
-ACCESS_TOKEN_LIFETIME_MINUTES=60
-REFRESH_TOKEN_LIFETIME_DAYS=7
-
-# CORS Settings
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-
-# Frontend Configuration
-VITE_API_URL=http://localhost:8000/api
-```
-
-### backend/.env.example
-```bash
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-# Database
-DB_NAME=todo_db
-DB_USER=postgres
-DB_PASSWORD=your-password
-DB_HOST=localhost
-DB_PORT=5432
-
-# JWT Settings
-ACCESS_TOKEN_LIFETIME_MINUTES=60
-REFRESH_TOKEN_LIFETIME_DAYS=7
-
-# CORS
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-```
-
-### frontend/.env.example
-```bash
-VITE_API_URL=http://localhost:8000/api
-```
-
-## Разработка
-
-### Backend (локально)
-```bash
-cd backend
-cp .env.example .env
-# Отредактируйте .env
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
-```
-
-### Frontend (локально)
-```bash
-cd frontend
-cp .env.example .env
-# Отредактируйте .env
-npm install
-npm run dev
-```
-
-## Команды Docker
-
-```bash
-# Запуск всех сервисов
-docker-compose up
-
-# Запуск в фоне
-docker-compose up -d
-
-# Пересборка образов
-docker-compose up --build
-
-# Остановка
-docker-compose down
-
-# Просмотр логов
-docker-compose logs backend
-docker-compose logs frontend
-
-# Выполнение команд в контейнере
-docker-compose exec backend python manage.py shell
-docker-compose exec backend python manage.py migrate
-```
-
-## Безопасность
-
-- Все sensitive данные хранятся в .env файлах
-- .env файлы добавлены в .gitignore
-- Для production используйте сильные пароли и секретные ключи
-- Регулярно обновляйте зависимости
-
-## Production Deployment
-
-1. **Обновите переменные окружения для production**
-2. **Установите DEBUG=False**
-3. **Используйте сильные пароли и секретные ключи**
-4. **Настройте SSL/HTTPS**
-5. **Используйте production готовую БД**
-6. **Настройте статические файлы**
-7. **Добавьте мониторинг и логирование**
-
-## Поддержка
-
-Если возникли вопросы или проблемы, создайте issue в репозитории. 

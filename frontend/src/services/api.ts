@@ -1,20 +1,10 @@
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
-// Универсальная конфигурация API
+// API конфигурация для локальной разработки
 const getApiUrl = () => {
-  // Для production используем VITE_API_URL
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL
-  }
-  
-  // Для development используем localhost
-  if (import.meta.env.DEV) {
-    return 'http://localhost:8000/api'
-  }
-  
-  // Fallback для production
-  return 'https://your-backend.onrender.com/api'
+  // Используем переменную окружения или localhost по умолчанию
+  return import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 }
 
 const api = axios.create({

@@ -14,6 +14,8 @@ ALLOWED_HOSTS = [
     '.render.com',
     '.vercel.app',
     '.now.sh',
+    '.railway.app',
+    '.railway.dev',
     '.herokuapp.com'
 ]
 
