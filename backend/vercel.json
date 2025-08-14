@@ -1,0 +1,27 @@
+{
+  "buildCommand": "pip install -r requirements.txt",
+  "outputDirectory": ".",
+  "framework": "django",
+  "functions": {
+    "todo_project/wsgi.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/todo_project/wsgi.py"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "/todo_project/wsgi.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/todo_project/wsgi.py"
+    }
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "todo_project.settings"
+  }
+} 
